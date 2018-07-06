@@ -73,14 +73,15 @@ public class Streams {
          *
          * HINT: You will need to create a new class for this.
          */
-        Fibonacci fibonacci = new Fibonacci();
-        Supplier<Integer> fibonacciGenerator = () -> fibonacci.nextFibonacciNumberNoParam();
-        Stream<Integer> s6 = Stream.iterate(1, x -> fibonacciGenerator.get()).limit(15);
+        // Solution with iterator
+        Supplier<Integer> fibonacciIterator = new Fibonacci();
+        Stream<Integer> s6 = Stream.iterate(1, x -> fibonacciIterator.get()).limit(15);
         s6.forEach(System.out::println);
 
-//TODO: NOW, THAT WAS REALLY MEAN, PUTTING THE INITIALIZATION AND THE INTEGER SUPPLIER FUNCTION IN ONE LINE
-//        Supplier<Integer> fibSupp = new Fibonacci();
-//        Stream<Integer> s6 = ;
+        // Solution with generator
+        Supplier<Integer> fibonacciGenerator = new Fibonacci();
+        Stream<Integer> s61 = Stream.generate(fibonacciGenerator).limit(15);
+        s61.forEach(System.out::println);
 
     }
 }
