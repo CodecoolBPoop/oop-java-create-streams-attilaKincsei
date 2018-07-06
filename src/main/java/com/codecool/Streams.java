@@ -73,11 +73,10 @@ public class Streams {
         UnaryOperator<Integer> doubler = (Integer x) -> 2 * x;
 
 
-        Stream<Integer> s4 = Stream.iterate(1, doubler);
-        s4.forEach(System.out::println);
+        Stream<Integer> s4 = Stream.iterate(twoToTheZeroth, doubler);
 
         // Another way:
-        Stream<Integer> s41 = Stream.iterate(1, x -> 2 * x).limit(10);
+        Stream<Integer> s41 = Stream.iterate(1, x -> 1 + x).limit(10);
 
         // Writing a method and using it as lambda
         Stream<Integer> s43 = Stream.iterate(1, Streams::dubloer).limit(10);
@@ -88,16 +87,45 @@ public class Streams {
 
         Stream<Integer> s5 = Stream.iterate(1, doubler).limit(10);
 
+
         /*
          * Create a stream containing the elements of the Fibonacci
          * sequence.
          *
          * HINT: You will need to create a new class for this.
          */
+        // Solution 1: without a Supplier function, but with a list
+        List<Integer> fibList = new ArrayList<>();
+        fibList.add(0);
+        Stream<Integer> s61 = Stream.iterate(1, x -> {
+            fibList.add(x);
+            return fibList.get(fibList.size() - 1) + fibList.get(fibList.size() - 2);
+        }).limit(10);
 
-        Supplier<Integer> fibSupp = new Fibonacci();
-        Stream<Integer> s6;
+        // Solution 4: function saves the current element and returns the previous.
+        Fibonacci try4 = new Fibonacci();
+        Stream<Integer> s64 = Stream.iterate(1, x -> {
+            return x += try4.memorizeCurrentReturnPrevious(x);
+        }).limit(10);
+//        s64.forEach(System.out::println);
+
+        // Solution 5: invoked function does all the work
+        Fibonacci try5 = new Fibonacci();
+        Stream<Integer> s65 = Stream.iterate(1, try5::fibonacciByElement).limit(15);
+//        s65.forEach(System.out::println);
+
+        // Solution 5: invoked function does all the work
+        Fibonacci try51 = new Fibonacci();
+        Stream<Integer> s651 = Stream.iterate(1, try51::fibonacciByElementNoList).limit(15);
+//        s651.forEach(System.out::println);
+
+        // Solution 6: invoked function does all the work
+//        Supplier<Fibonacci> try6 = () -> (new Fibonacci()).fibonacciByElement();
+//        Stream<Integer> s66 = Stream.iterate(1, x -> try6.get().fibonacciByElement(x)).limit(10);
+//        s66.forEach(System.out::println);
 
 
+//        Supplier<Integer> fibSupp = () -> new Fibonacci();
+//        Stream<Integer> s61 = fibSupp.get();
     }
 }
