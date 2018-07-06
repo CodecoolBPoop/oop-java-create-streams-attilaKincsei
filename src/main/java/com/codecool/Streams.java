@@ -1,18 +1,13 @@
 package com.codecool;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 public class Streams {
-
-    static Integer dubloer(Integer number) {
-        return 2 * number;
-    }
 
     public static void main(String[] args) {
         /*
@@ -42,11 +37,6 @@ public class Streams {
 
         Stream<String> s3 = b1.build();
 
-
-        // Or the above two steps combined into one step:
-        Stream<String> s31 = Stream.<String>builder().add("one").add("two").add("three").build();
-
-
         /*
          * Collect one of the above defined streams into a list.
          *
@@ -68,25 +58,14 @@ public class Streams {
         /*
          * Create a stream of the powers of two.
          */
-
         Integer twoToTheZeroth = 1;
         UnaryOperator<Integer> doubler = (Integer x) -> 2 * x;
-
-
         Stream<Integer> s4 = Stream.iterate(twoToTheZeroth, doubler);
-
-        // Another way:
-        Stream<Integer> s41 = Stream.iterate(1, x -> 1 + x).limit(10);
-
-        // Writing a method and using it as lambda
-        Stream<Integer> s43 = Stream.iterate(1, Streams::dubloer).limit(10);
 
         /*
          * Create a stream containing the first ten elements of s4.
          */
-
         Stream<Integer> s5 = Stream.iterate(1, doubler).limit(10);
-
 
         /*
          * Create a stream containing the elements of the Fibonacci
@@ -94,38 +73,20 @@ public class Streams {
          *
          * HINT: You will need to create a new class for this.
          */
-        // Solution 1: without a Supplier function, but with a list
-        List<Integer> fibList = new ArrayList<>();
-        fibList.add(0);
-        Stream<Integer> s61 = Stream.iterate(1, x -> {
-            fibList.add(x);
-            return fibList.get(fibList.size() - 1) + fibList.get(fibList.size() - 2);
-        }).limit(10);
-
-        // Solution 4: function saves the current element and returns the previous.
-        Fibonacci try4 = new Fibonacci();
-        Stream<Integer> s64 = Stream.iterate(1, x -> {
-            return x += try4.memorizeCurrentReturnPrevious(x);
-        }).limit(10);
-//        s64.forEach(System.out::println);
-
         // Solution 5: invoked function does all the work
-        Fibonacci try5 = new Fibonacci();
-        Stream<Integer> s65 = Stream.iterate(1, try5::fibonacciByElement).limit(15);
-//        s65.forEach(System.out::println);
-
-        // Solution 5: invoked function does all the work
-        Fibonacci try51 = new Fibonacci();
-        Stream<Integer> s651 = Stream.iterate(1, try51::fibonacciByElementNoList).limit(15);
-//        s651.forEach(System.out::println);
+        Fibonacci fibonacciObject = new Fibonacci();
+        Stream<Integer> s60 = Stream.iterate(1, fibonacciObject::nextFibonacciNumber).limit(15);
+//        s60.forEach(System.out::println);
 
         // Solution 6: invoked function does all the work
-//        Supplier<Fibonacci> try6 = () -> (new Fibonacci()).fibonacciByElement();
-//        Stream<Integer> s66 = Stream.iterate(1, x -> try6.get().fibonacciByElement(x)).limit(10);
-//        s66.forEach(System.out::println);
+        Fibonacci fibonacci = new Fibonacci();
+        Supplier<Integer> fibonacciGenerator = () -> fibonacci.nextFibonacciNumberNoParam();
+        Stream<Integer> s66 = Stream.iterate(1, x -> fibonacciGenerator.get()).limit(15);
+        s66.forEach(System.out::println);
 
 
-//        Supplier<Integer> fibSupp = () -> new Fibonacci();
-//        Stream<Integer> s61 = fibSupp.get();
+//        Supplier<Integer> fibSupp = new Fibonacci();
+//        Stream<Integer> s6 = ;
+
     }
 }
