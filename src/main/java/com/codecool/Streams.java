@@ -73,18 +73,12 @@ public class Streams {
          *
          * HINT: You will need to create a new class for this.
          */
-        // Solution 5: invoked function does all the work
-        Fibonacci fibonacciObject = new Fibonacci();
-        Stream<Integer> s60 = Stream.iterate(1, fibonacciObject::nextFibonacciNumber).limit(15);
-//        s60.forEach(System.out::println);
-
-        // Solution 6: invoked function does all the work
         Fibonacci fibonacci = new Fibonacci();
         Supplier<Integer> fibonacciGenerator = () -> fibonacci.nextFibonacciNumberNoParam();
-        Stream<Integer> s66 = Stream.iterate(1, x -> fibonacciGenerator.get()).limit(15);
-        s66.forEach(System.out::println);
+        Stream<Integer> s6 = Stream.iterate(1, x -> fibonacciGenerator.get()).limit(15);
+        s6.forEach(System.out::println);
 
-
+//TODO: NOW, THAT WAS REALLY MEAN, PUTTING THE INITIALIZATION AND THE INTEGER SUPPLIER FUNCTION IN ONE LINE
 //        Supplier<Integer> fibSupp = new Fibonacci();
 //        Stream<Integer> s6 = ;
 
