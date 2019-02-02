@@ -8,20 +8,19 @@ public class Fibonacci implements Supplier<Integer> {
     Integer next = 1;
     int iterator = 0;
 
-    Integer nextFibonacci() {
+    private Integer nextFibonacci() {
+
+        if (iterator < 2) {
+            return iterator++;
+        }
         Integer temp = next;
-        next = next + current;
+        next += current;
         current = temp;
         iterator++;
 
         return next;
     }
 
-    /**
-     * Gets a result.
-     *
-     * @return a result
-     */
     @Override
     public Integer get() {
         return nextFibonacci();
